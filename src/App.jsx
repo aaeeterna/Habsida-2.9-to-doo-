@@ -2,7 +2,7 @@ import "./App.css";
 import NewTaskForm from "./components/NewTaskForm";
 import TaskList from "./components/TaskList";
 import Footer from "./components/Footer";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 function App() {
   const [tasks, setTasks] = useState([
@@ -28,6 +28,19 @@ function App() {
       editing: false,
     },
   ]);
+
+  const nextId = useRef(4);
+
+  const addTask = (title) => {
+    const newTask = {
+      id: nextId.current++,
+      title,
+      createdAt: new Date(),
+      completed: false,
+      editing: false,
+    };
+    setTasks((prev) => [...prev, newTask]);
+  };
 
   const toggleTask = (id) => {
     setTasks((prev) =>
@@ -65,7 +78,7 @@ function App() {
     <section className="todoapp">
       <header className="header">
         <h1>todos</h1>
-        <NewTaskForm />
+        <NewTaskForm onAdd={addTask} />
       </header>
 
       <section className="main">
